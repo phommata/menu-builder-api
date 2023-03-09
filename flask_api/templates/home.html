@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask REST API</title>
+</head>
+<body>
+    <h1>
+        Menu Builder API!
+    </h1>
+    {% for section in menu %}
+    <h2>{{ section.name }} {{ section.description }}</h2>
+    <ul>
+        {% for item in section.items %}
+        <li>
+            {{ item.name }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+</body>
+</html>

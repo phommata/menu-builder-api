@@ -1,0 +1,333 @@
+openapi: 3.0.0
+info:
+  title: "Flask REST API"
+  description: "A Menu Builder API"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    Section:
+      type: "object"
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+    Item:
+      type: "object"
+      required:
+        - section_id
+        - name
+        - description
+        - price
+      properties:
+        section_id:
+          type: "integer"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        price:
+          type: "number"
+    Modifier:
+      type: "object"
+      required:
+        - description
+      properties:
+        description:
+          type: "string"
+    ItemModifier:
+      type: "object"
+      required:
+        - item_id
+        - modifier_id
+      properties:
+        item_id:
+          type: "integer"
+        modifier_id:
+          type: "integer"
+  parameters:
+    section_id:
+      name: "section_id"
+      description: "ID of the section"
+      in: path
+      required: true
+      schema:
+        type: "integer"
+    item_id:
+      name: "item_id"
+      description: "ID of the item"
+      in: path
+      required: true
+      schema:
+        type: "integer"
+    modifier_id:
+      name: "modifier_id"
+      description: "ID of the modifier"
+      in: path
+      required: true
+      schema:
+        type: "integer"
+    item_modifier_id:
+      name: "item_modifier_id"
+      description: "ID of the item modifier"
+      in: path
+      required: true
+      schema:
+        type: "integer"
+
+paths:
+  /menu:
+    get:
+      operationId: "menu.read_all"
+      tags:
+        - "Menu"
+      summary: "Read the list of menu"
+      responses:
+        "200":
+          description: "Successfully read menu list"
+    post:
+      operationId: "menu.create"
+      tags:
+        - Menu
+      summary: "Create a section"
+      requestBody:
+          description: "Section to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "section"
+                $ref: "#/components/schemas/Section"
+      responses:
+        "201":
+          description: "Successfully created menu"
+  /menu/{section_id}:
+    get:
+      operationId: "menu.read_one"
+      tags:
+        - Menu
+      summary: "Read one section"
+      parameters:
+        - $ref: "#/components/parameters/section_id"
+      responses:
+        "200":
+          description: "Successfully read menu"
+    put:
+      tags:
+        - Menu
+      operationId: "menu.update"
+      summary: "Update a section"
+      parameters:
+        - $ref: "#/components/parameters/section_id"
+      responses:
+        "200":
+          description: "Successfully updated section"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "section"
+              $ref: "#/components/schemas/Section"
+    delete:
+      tags:
+        - Menu
+      operationId: "menu.delete"
+      summary: "Delete a menu"
+      parameters:
+        - $ref: "#/components/parameters/section_id"
+      responses:
+        "204":
+          description: "Successfully deleted menu"
+  /items:
+    get:
+      operationId: "items.read_all"
+      tags:
+        - "Items"
+      summary: "Read the list of items"
+      responses:
+        "200":
+          description: "Successfully read items list"
+    post:
+      operationId: "items.create"
+      tags:
+        - Items
+      summary: "Create a item associated with a section"
+      requestBody:
+          description: "Item to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "item"
+                $ref: "#/components/schemas/Item"
+      responses:
+        "201":
+          description: "Successfully created a item"
+  /items/{item_id}:
+    get:
+      operationId: "items.read_one"
+      tags:
+        - Items
+      summary: "Read one item"
+      parameters:
+        - $ref: "#/components/parameters/item_id"
+      responses:
+        "200":
+          description: "Successfully read one item"
+    put:
+      tags:
+        - Items
+      operationId: "items.update"
+      summary: "Update a item"
+      parameters:
+        - $ref: "#/components/parameters/item_id"
+      responses:
+        "200":
+          description: "Successfully updated item"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "item"
+              $ref: "#/components/schemas/Item"
+    delete:
+      tags:
+        - Modifiers
+      operationId: "items.delete"
+      summary: "Delete a item"
+      parameters:
+        - $ref: "#/components/parameters/item_id"
+      responses:
+        "204":
+          description: "Successfully deleted item"
+  /modifiers:
+    get:
+      operationId: "modifiers.read_all"
+      tags:
+        - "Modifiers"
+      summary: "Read the list of modifiers"
+      responses:
+        "200":
+          description: "Successfully read modifier list"
+    post:
+      operationId: "modifiers.create"
+      tags:
+        - Modifiers
+      summary: "Create a modifier"
+      requestBody:
+          description: "Modifier to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "modifier"
+                $ref: "#/components/schemas/Modifier"
+      responses:
+        "201":
+         description: "Successfully created a modifier"
+  /modifiers/{modifier_id}:
+    get:
+      operationId: "modifiers.read_one"
+      tags:
+        - Modifiers
+      summary: "Read one modifier"
+      parameters:
+        - $ref: "#/components/parameters/modifier_id"
+      responses:
+        "200":
+          description: "Successfully read one modifier"
+    put:
+      tags:
+        - Modifiers
+      operationId: "modifiers.update"
+      summary: "Update a modifier"
+      parameters:
+        - $ref: "#/components/parameters/modifier_id"
+      responses:
+        "200":
+          description: "Successfully updated modifier"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "modifier"
+              $ref: "#/components/schemas/Modifier"
+    delete:
+      tags:
+        - Modifiers
+      operationId: "modifiers.delete"
+      summary: "Delete a modifier"
+      parameters:
+        - $ref: "#/components/parameters/modifier_id"
+      responses:
+        "204":
+          description: "Successfully deleted modifier"
+  /item_modifiers:
+    get:
+      operationId: "item_modifiers.read_all"
+      tags:
+        - "ItemModifiers"
+      summary: "Read the list of item modifiers"
+      responses:
+        "200":
+          description: "Successfully read item modifiers list"
+    post:
+      operationId: "item_modifiers.create"
+      tags:
+        - ItemModifiers
+      summary: "Associate a modifier with an item"
+      requestBody:
+          description: "Item modifier to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "item_modifier"
+                $ref: "#/components/schemas/ItemModifier"
+      responses:
+        "201":
+          description: "Successfully created an item modifier"
+  /item_modifiers/{item_modifier_id}:
+    get:
+      operationId: "item_modifiers.read_one"
+      tags:
+        - ItemModifiers
+      summary: "Read one item modifier"
+      parameters:
+        - $ref: "#/components/parameters/item_modifier_id"
+      responses:
+        "200":
+          description: "Successfully read one item modifier"
+    put:
+      tags:
+        - ItemModifiers
+      operationId: "item_modifiers.update"
+      summary: "Update an item modifier"
+      parameters:
+        - $ref: "#/components/parameters/item_modifier_id"
+      responses:
+        "200":
+          description: "Successfully updated item modifier"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "item_modifier"
+              $ref: "#/components/schemas/ItemModifier"
+    delete:
+      tags:
+        - ItemModifiers
+      operationId: "item_modifiers.delete"
+      summary: "Delete an item modifier"
+      parameters:
+        - $ref: "#/components/parameters/item_modifier_id"
+      responses:
+        "204":
+          description: "Successfully deleted item modifier"
